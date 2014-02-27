@@ -1,0 +1,6 @@
+[submodule "ext/lua"]
+	path = ext/lua
+	url = https://github.com/LuaDist/lua.git
+[submodule "ext/luabind"]
+	path = ext/luabind
+	url = https://github.com/luabind/luabind.git
