@@ -11,11 +11,11 @@ set (CMAKE_CXX_COMPILER clang++)
 project( tanaka )
 
 include_directories( "ext/glm" )
-include_directories( "ext/glfw-3.0.3.bin.WIN32/include" )
-include_directories( "ext/glew-1.10.0/include" )
+include_directories( "ext/glfw/include" )
+include_directories( "ext/glew/include" )
 include_directories( "src" )
 
-link_directories( "${CMAKE_SOURCE_DIR}/ext/glew-1.10.0/lib/Release/Win32" )
-link_directories( "${CMAKE_SOURCE_DIR}/ext/glfw-3.0.3.bin.WIN32/lib-msvc110")
+link_directories( "${CMAKE_SOURCE_DIR}/ext/glew/lib" )
+link_directories( "${CMAKE_SOURCE_DIR}/ext/glfw/lib")
 
 add_subdirectory( src )
