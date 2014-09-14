@@ -18,6 +18,7 @@ public:
     static
     Ptr Create();
 
+	SpatialComponent();
     virtual ~SpatialComponent();
 
     void pos(float x, float y, float z);
@@ -36,9 +37,13 @@ public:
     std::string internal_to_string() const;
 
 private:
+
+
     Vector3 _position;
     Vector3 _rotation;
     Matrix _matrix;
+	float _scale;
+	bool _dirty;
 };
 
 

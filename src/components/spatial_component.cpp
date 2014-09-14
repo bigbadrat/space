@@ -2,9 +2,20 @@
 #include <memory>
 #include <iostream>
 #include <sstream>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
+
 
 namespace Tanaka
 {
+
+SpatialComponent::SpatialComponent():
+	_matrix(1.0),
+	_rotation(0),
+	_scale(1.0),
+	_dirty(false)
+{
+}
 
 SpatialComponent::~SpatialComponent()
 {
@@ -20,18 +31,34 @@ SpatialComponent::Ptr SpatialComponent::Create()
 void SpatialComponent::pos(float x, float y, float z)
 {
     _position = Vector3(x,y,z);
+	_dirty = true;
 
 }
 
 void SpatialComponent::pos(Vector3& pos)
 {
     _position = pos;
+	_dirty = true;
+}
+
+void SpatialComponent::rotation(float x, float y, float z)
+{
+    _rotation = Vector3(x,y,z);
+	_dirty = true;
+
 }
 
 Matrix SpatialComponent::matrix()
 {
-    //_matrix = glm::rotate
-        return _matrix;
+	if (_dirty)
+	{
+		
+		_matrix = glm::translate(glm::mat4(1.0),_position)*
+			glm::scale(glm::mat4(1.0),glm::vec3(_scale))*
+			glm::eulerAngleYXZ(_rotation.y, _rotation.x, _rotation.z);
+		_dirty = false;
+	}
+    return _matrix;
 }
 
 std::string SpatialComponent::name() 

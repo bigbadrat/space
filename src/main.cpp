@@ -8,6 +8,8 @@
 #include "components/input_handler_component.h"
 #include "components/behavior_engine.h"
 #include "components/move_with_bounce_behavior.h"
+#include "components/model_component.h"
+#include "assets/model_obj.h"
 #include "entity.h"
 #include "message.h"
 #include "engine.h"
@@ -23,20 +25,25 @@ int main()
     Engine engine;
     engine.init();
 
+	Model::Ptr first( new Model("space_frigate_6.obj"));
+	auto mc = ModelComponent::Create();
+	mc->set_model(first);
     //Test entity ftw, followed by a test component
     Entity::Ptr e( Entity::Create() );
     e->name("player");
     BaseComponent::Ptr comp( BaseComponent::Create() );
     auto sc = SpatialComponent::Create();
     auto bec = BehaviorEngineComponent::Create();
-    auto cc = CubeComponent::Create();
+    //auto cc = CubeComponent::Create();
     auto ih = InputHandlerComponent::Create();
     sc->pos(0,0,50);
-	cc->set_color(1,0,0);
+	sc->rotation(90,0,0);
+	//cc->set_color(1,0,0);
     e->add(comp);
     e->add(sc);
     e->add(bec);
-    e->add(cc);
+    //e->add(cc);
+	e->add(mc);
     e->add(ih);
 
     Entity::Ptr e2( Entity::Create() );

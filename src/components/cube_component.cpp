@@ -55,7 +55,16 @@ CubeComponent::CubeComponent():
 		glBindVertexArray(0);
 	}
 }
-
+CubeComponent::~CubeComponent()
+{
+	if (g_vertex_array_id != 0)
+	{
+		glDeleteVertexArrays( 1, &g_vertex_array_id);
+		glDeleteBuffers(1, &g_vertex_buffer_id);
+		g_vertex_array_id = 0;
+		g_vertex_buffer_id = 0;
+	}
+}
 
 void CubeComponent::draw()
 {
@@ -67,7 +76,7 @@ void CubeComponent::draw()
 	renderer.set_shader("easy");
 	
 	//Move the cube where it should appear
-	renderer.set_model_matrix( glm::translate(glm::mat4(1.0f), _spatial->pos()) );
+	renderer.set_model_matrix( _spatial->matrix());
 	renderer.set_diffuse(_color);
 	
 	//Activate the vertex array with all the data and ask for drawing

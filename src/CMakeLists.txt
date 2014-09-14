@@ -1,3 +1,5 @@
+add_subdirectory( components )
+add_subdirectory( assets )
 
 set (sources 
         main.cpp
@@ -10,12 +12,10 @@ set (sources
         io.cpp
     )
 
-add_subdirectory( components )
-add_subdirectory( assets )
 
-message("Compile again dammit")
 set (libs
         tanaka_components
+		tanaka_assets
         glu32
         glfw3
         glew32s

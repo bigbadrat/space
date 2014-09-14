@@ -20,19 +20,20 @@ public:
   
 
 	Model(const std::string& filename);
+	virtual ~Model();
 
  
     const std::string& name() const;
     
-    
-    ~Model();
+    void draw();
+	
+
 private:
 
-	std::vector<glm::vec4> mVertices;
-	std::vector<glm::vec3> mNormals;
-	std::vector<GLushort> mElements;
-	std::vector<glm::vec2> mTexCoords;
+	std::vector<glm::vec4> _vertices;
     std::string _name;
+	GLuint _vao;
+	GLuint _vbo;
 };
 
 
