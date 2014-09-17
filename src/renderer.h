@@ -34,6 +34,7 @@ class Renderer
 
 		void set_model_matrix(const glm::mat4& loc);
 		void set_diffuse(const glm::vec3& color);
+		void set_light_dir(const glm::vec3& dir);
 
     private:
         static Renderer* _instance;
@@ -44,7 +45,9 @@ class Renderer
 
 		glm::mat4 _view_proj_matrix;
 		unsigned int _diffuse;
-		unsigned int _mvp_loc;
+		unsigned int _mvp;
+		unsigned int _model;
+		unsigned int _light_dir;
 };
 
 

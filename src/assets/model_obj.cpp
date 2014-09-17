@@ -8,7 +8,7 @@
 
 namespace Tanaka
 {
-	void load_obj(const char* filename, std::vector<glm::vec4> &vertices, std::vector<glm::vec3> &normals, std::vector<glm::vec2> &uvs, 
+	void load_obj(const char* filename, std::vector<Model::Vertex> &vertices, std::vector<glm::vec3> &normals, std::vector<glm::vec2> &uvs, 
 		std::vector<GLuint> &vertexIndices, std::vector<GLuint> &normalIndices,std::vector<GLuint> &uvIndices) 
 	{
 		std::ifstream in(filename, std::ios::in);
@@ -17,7 +17,7 @@ namespace Tanaka
 			std::cerr << "Cannot open " << filename << std::endl; 
 			exit(1); 
 		}
-		std::vector<glm::vec4> tmp_vertices;
+		std::vector<glm::vec3> tmp_vertices;
 		std::string line;
 		while ( std::getline(in, line) ) 
 		{
@@ -28,13 +28,13 @@ namespace Tanaka
 			{ 
 				float x,y,z;
 				sline >> x >> y >> z;
-				tmp_vertices.emplace_back(x,y,z,1.0f);
+				tmp_vertices.emplace_back(x,y,z);
 			}  
 			else if (type == "vn") //Reading a normal
 			{
 				float x,y,z;
 				sline >> x >> y >> z;
-				normals.emplace_back(x,y,z);
+				normals.push_back(glm::normalize(glm::vec3(x,y,z)));
 			}
 			else if (type == "vt") //Reading a vertex texture coordinate
 			{
@@ -66,9 +66,13 @@ namespace Tanaka
 			else { /* ignoring this line */ }
 		}
 
-		for( auto index: vertexIndices)
+		for( size_t i = 0; i < vertexIndices.size(); ++i)
 		{
-			vertices.push_back( tmp_vertices[index-1] );
+			Model::Vertex aux;
+			aux.position = tmp_vertices[vertexIndices[i]-1];
+			aux.normal = normals[normalIndices[i] -1];
+
+			vertices.push_back( aux );
 		}
 		
 
@@ -91,11 +95,13 @@ Model::Model(const std::string& filename)
 	//Generate and load the data to the vbo
 	glGenBuffers(1, &_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-	glBufferData(GL_ARRAY_BUFFER,_vertices.size()*sizeof(glm::vec4), &_vertices[0],GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER,_vertices.size()*sizeof(Model::Vertex), &_vertices[0],GL_STATIC_DRAW);
 		
 	//For now, we know the attribute 0 is the vertex position.
-	glVertexAttribPointer( 0,4, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer( 0,3, GL_FLOAT, GL_FALSE, sizeof(Model::Vertex), 0);
+	glVertexAttribPointer( 1,3, GL_FLOAT, GL_FALSE, sizeof(Model::Vertex), (void*)sizeof(glm::vec3));
 	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 
 	//Unbind the vertex array to prevent accidetal changes from outside
 	glBindVertexArray(0);

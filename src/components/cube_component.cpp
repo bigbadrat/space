@@ -15,22 +15,64 @@ namespace Tanaka
 	static GLuint g_vertex_array_id = 0;
 	static GLuint g_vertex_buffer_id = 0;
 	
-
+	//TODO: Check all tris are clockwise!!!
 static GLfloat g_vertex_buffer_data[] = {
-    //lower triangle
-   -1.0f, -1.0f, 0.0f,
-    1.0f, -1.0f, 0.0f,
-    1.0f,  1.0f, 0.0f,
-	//upper triangle
-   -1.0f, -1.0f, 0.0f,
-	1.0f,  1.0f, 0.0f,
-   -1.0f,  1.0f, 0.0f
+    //back face tri1    // Normal
+   -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+    0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+	0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+	//back face tri2    // Normal
+   -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+   -0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+    0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+
+	//front face tri1  // Normal
+	-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+	 0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+    -0.5f,  0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+	//front face tri2  // Normal
+	-0.5f,  0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+	 0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+	 0.5f,  0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+
+	//right face tri1   // Normal
+	0.5f, -0.5f, 0.5f,  1.0f, 0.0f, 0.0f,
+	0.5f, -0.5f,-0.5f,  1.0f, 0.0f, 0.0f,
+	0.5f,  0.5f,-0.5f,  1.0f, 0.0f, 0.0f,
+	//right face tri2   // Normal
+	0.5f,  0.5f,-0.5f,  1.0f, 0.0f, 0.0f,
+	0.5f,  0.5f, 0.5f,  1.0f, 0.0f, 0.0f,
+	0.5f, -0.5f, 0.5f,  1.0f, 0.0f, 0.0f,
+
+	//left face tri1    // Normal
+	-0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+	-0.5f,  0.5f,-0.5f, -1.0f, 0.0f, 0.0f,
+	-0.5f, -0.5f,-0.5f, -1.0f, 0.0f, 0.0f,
+	//left face tri2    // Normal
+	-0.5f,  0.5f,-0.5f, -1.0f, 0.0f, 0.0f,
+	-0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+	-0.5f,  0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+
+	//upper face tri1	//Normal
+	-0.5f,  0.5f, 0.5f,  0.0f, 1.0f, 0.0f,
+	 0.5f,  0.5f, 0.5f,  0.0f, 1.0f, 0.0f,
+	 0.5f,  0.5f,-0.5f,  0.0f, 1.0f, 0.0f,
+	//upper face tri2	//Normal
+	-0.5f,  0.5f, 0.5f,  0.0f, 1.0f, 0.0f,
+	 0.5f,  0.5f,-0.5f,  0.0f, 1.0f, 0.0f,
+	-0.5f,  0.5f,-0.5f,  0.0f, 1.0f, 0.0f,
+
+   	//lower face tri1 //Normal
+    0.5f, -0.5f, 0.5f,  0.0f,-1.0f, 0.0f,
+   -0.5f, -0.5f, 0.5f,  0.0f,-1.0f, 0.0f,
+    0.5f, -0.5f,-0.5f,  0.0f,-1.0f, 0.0f,
+	//lower face tri2 //Normal
+   -0.5f, -0.5f, 0.5f,  0.0f,-1.0f, 0.0f,
+   -0.5f, -0.5f,-0.5f,  0.0f,-1.0f, 0.0f,
+    0.5f, -0.5f,-0.5f,  0.0f,-1.0f, 0.0f
+
 };
 
-static GLuint g_index_buffer_data[] = {
-    0,1,2,
-    0,2,3,
-};
 
 CubeComponent::CubeComponent():
 	_color(glm::vec3(1,0,0))
@@ -48,8 +90,10 @@ CubeComponent::CubeComponent():
 		glBufferData(GL_ARRAY_BUFFER,sizeof(g_vertex_buffer_data), g_vertex_buffer_data,GL_STATIC_DRAW);
 		
 		//For now, we know the attribute 0 is the vertex position.
-		glVertexAttribPointer( 0,3, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer( 0,3, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*6, 0);
+		glVertexAttribPointer( 1,3, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*6, (GLvoid*)(sizeof(GLfloat)*3));
 		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
 
 		//Unbind the vertex array to prevent accidetal changes from outside
 		glBindVertexArray(0);
@@ -75,13 +119,19 @@ void CubeComponent::draw()
 	Renderer& renderer = Engine::get().renderer();
 	renderer.set_shader("easy");
 	
+	static float rot = 0.0f;
+	_spatial->rotation(45.0f,rot,0.0f);
+	rot += 2;
+	if (rot > 360)
+		rot = 0;
+	
 	//Move the cube where it should appear
-	renderer.set_model_matrix( _spatial->matrix());
+	renderer.set_model_matrix( _spatial->matrix() );
 	renderer.set_diffuse(_color);
 	
 	//Activate the vertex array with all the data and ask for drawing
 	glBindVertexArray(g_vertex_array_id);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 }
 

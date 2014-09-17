@@ -25,6 +25,7 @@ public:
     void pos(Vector3& pos);
 
     void rotation(float x, float y, float z);
+	void scale(float s);
 
     Matrix matrix();
 

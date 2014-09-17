@@ -37,7 +37,7 @@ int main()
     //auto cc = CubeComponent::Create();
     auto ih = InputHandlerComponent::Create();
     sc->pos(0,0,50);
-	sc->rotation(90,0,0);
+	sc->rotation(90,45,0);
 	//cc->set_color(1,0,0);
     e->add(comp);
     e->add(sc);
@@ -46,19 +46,23 @@ int main()
 	e->add(mc);
     e->add(ih);
 
+	//X+ is to the left of the screen
+	//Y+ is up
+	//Z+ is to the viewer, Farther inside the screen is z-
     Entity::Ptr e2( Entity::Create() );
     e2->name("prop");
     auto sc2 = SpatialComponent::Create();
     auto bec2 = BehaviorEngineComponent::Create();
     e2->add(sc2);
     e2->add(bec2);
-    sc2->pos(20,0,50);
+    sc2->pos(0,0,50);
+	sc2->scale(10);
     auto cc2 = CubeComponent::Create();
 	cc2->set_color(0,1,0);
     e2->add(cc2);
-    auto mbh = MoveWithBounceBehavior::Create();
+   /* auto mbh = MoveWithBounceBehavior::Create();
     mbh->speed(1, 1, 0);
-    bec2->add(mbh);
+    bec2->add(mbh);*/
 
     engine.entity_manager().dump();
 

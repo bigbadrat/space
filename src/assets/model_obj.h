@@ -26,11 +26,18 @@ public:
     const std::string& name() const;
     
     void draw();
-	
+
+	struct Vertex
+	{
+		glm::vec3 position;
+		glm::vec3 normal;
+	};
 
 private:
 
-	std::vector<glm::vec4> _vertices;
+	
+
+	std::vector<Vertex> _vertices;
     std::string _name;
 	GLuint _vao;
 	GLuint _vbo;

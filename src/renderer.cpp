@@ -135,16 +135,25 @@ void Renderer::init()
 	std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
 	std::cout << "Initializing shaders....." << std::endl;
 
+	// Enable depth test
+	//glEnable(GL_DEPTH_TEST);
+	//// Accept fragment if it closer to the camera than the former one
+	//glDepthFunc(GL_LESS);
+	glCullFace(GL_BACK);
+
 	//Load shaders and get the handle for the uniform parameter
 	load_shaders("easy.vsh", "easy.psh");
 	//set_shader("easy");
-	_mvp_loc = glGetUniformLocation(_shader_list.back(), "MVP");
+	_mvp = glGetUniformLocation(_shader_list.back(), "ModelViewProj");
+	_model = glGetUniformLocation(_shader_list.back(), "Model");
 	_diffuse = glGetUniformLocation(_shader_list.back(), "diffuse");
+	_light_dir = glGetUniformLocation(_shader_list.back(), "light_dir");
 
 	//Set up a simple camera setting.
-	glm::mat4 view = glm::lookAt(glm::vec3(0,0,0), glm::vec3(0,0,100), glm::vec3(0,1,0));
+	glm::mat4 view = glm::lookAt(glm::vec3(0,0,100), glm::vec3(0,0,0), glm::vec3(0,1,0));
 	glm::mat4 proj  = glm::perspective(45.0f,4.0f/3.0f,0.0f,500.0f);
 	_view_proj_matrix = proj * view;
+		
 
 }
 void Renderer::load_shaders(const std::string& vertex_filename, const std::string& fragment_filename)
@@ -165,7 +174,9 @@ void Renderer::begin_scene_drawing()
 {
 	//For now, simply clear the background
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
+		set_light_dir(glm::normalize(glm::vec3(0.15f,-1.0f, 0.15f)));
+
 }
 
 void Renderer::end_scene_drawing()
@@ -194,12 +205,18 @@ Renderer* Renderer::get()
 void Renderer::set_model_matrix(const glm::mat4& loc)
 {
 	auto mvp = _view_proj_matrix * loc;
-	glUniformMatrix4fv(_mvp_loc,1,false, glm::value_ptr(mvp));
+	glUniformMatrix4fv(_mvp,1,false, glm::value_ptr(mvp));
+	glUniformMatrix4fv(_model,1,false, glm::value_ptr(loc));
 }
 
 void Renderer::set_diffuse(const glm::vec3& color)
 {
 	glUniform3fv(_diffuse, 1, glm::value_ptr(color));
+}
+
+void Renderer::set_light_dir(const glm::vec3& dir)
+{
+	glUniform3fv(_light_dir, 1, glm::value_ptr(glm::normalize(dir)));
 }
 
 }

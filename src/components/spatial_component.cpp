@@ -43,7 +43,13 @@ void SpatialComponent::pos(Vector3& pos)
 
 void SpatialComponent::rotation(float x, float y, float z)
 {
-    _rotation = Vector3(x,y,z);
+    _rotation = Vector3(glm::radians(x),glm::radians(y),glm::radians(z));
+	_dirty = true;
+
+}
+void SpatialComponent::scale(float s)
+{
+    _scale= s;
 	_dirty = true;
 
 }
