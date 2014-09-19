@@ -9,22 +9,11 @@ Requirements
 
 * CMake
 * Clang 3.2+/gcc 4.7.3
-* OpenGL and Freeglut3 ("apt-get install freeglut3-dev mesa-common-dev" should be enough)
-* Boost (preferably 1.53) (no longer necesary, but it's always nice to have boost at hand)
-* GLM (apt-get install libglm-dev)
-* For using SFML: libxrandr-dev, libfreetype6-dev, libglew-dev, libjpeg-dev, libopenal-dev, libsndfile-dev
+* OpenGL and Freeglut3
+* GLM
+* GLFW
+* GLEW
 
-
-How to build
-============
-
-* Get the source code. 
-* Create a folder where you want to build
-* Inside that folder run "cmake <path to root of project>". 
-* Run it again.
-* Run "make"
-* Inside the "src" folder will be the executable.
-* If you want to make a debug build, instead of plain cmake use "cmake -DCMAKE_BUILD_TYPE=Debug <path>". The default is a "Release" build. 
 
 
 Overview
@@ -55,5 +44,5 @@ TO DO
 * Create some basic pre-made model components (like the cube being a cube, a sphere, etc).
 * Create a generic way to save-load entities so we can save maps.
 * Improve the way the keys are read. Probably create a system a la Xna for storing key presses and releases.
-* 
+* In the far future: add lua bindings for scripting.
 
