@@ -141,13 +141,13 @@ void Renderer::init()
 	//glDepthFunc(GL_LEQUAL);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	//glFrontFace(GL_CW);
 
 	//Load shaders and get the handle for the uniform parameter
 	load_shaders("easy.vsh", "easy.psh");
 	//set_shader("easy");
 	_mvp = glGetUniformLocation(_shader_list.back(), "ModelViewProj");
 	_model = glGetUniformLocation(_shader_list.back(), "Model");
+	_it_model = glGetUniformLocation(_shader_list.back(), "ITModel");
 	_diffuse = glGetUniformLocation(_shader_list.back(), "diffuse");
 	_light_dir = glGetUniformLocation(_shader_list.back(), "light_dir");
 
@@ -177,7 +177,7 @@ void Renderer::begin_scene_drawing()
 	//For now, simply clear the background
     glClearColor(0.4f, 0.4f, 0.4f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
-	set_light_dir(glm::normalize(glm::vec3(0.15f,-1.0f, 0.15f)));
+	set_light_dir(glm::normalize(glm::vec3(-0.15f,1.0f, -0.15f)));
 
 }
 
@@ -209,6 +209,7 @@ void Renderer::set_model_matrix(const glm::mat4& loc)
 	auto mvp = _view_proj_matrix * loc;
 	glUniformMatrix4fv(_mvp,1,false, glm::value_ptr(mvp));
 	glUniformMatrix4fv(_model,1,false, glm::value_ptr(loc));
+	glUniformMatrix4fv(_it_model,1,false, glm::value_ptr(glm::transpose(glm::inverse(loc))));
 }
 
 void Renderer::set_diffuse(const glm::vec3& color)

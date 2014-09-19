@@ -2,24 +2,24 @@
 
 uniform mat4 ModelViewProj;
 uniform mat4 Model;
+uniform mat4 ITModel;
 uniform vec3 diffuse;
 uniform vec3 light_dir;
 
 layout(location=0) in vec3 vPosition;
 layout(location=1) in vec3 vNormal;
-layout(location=2) in vec3 vVertColor;
+
 
 out vec3 vColor;
+out vec3 vLightDir;
+out vec3 vVNormal;
 
 void main()
 {
     gl_Position = ModelViewProj * vec4(vPosition,1.0);
-    vec4 surface_world_normal = normalize(Model*vec4(vNormal,1.0));
+    vec3 surface_world_normal = normalize( (ITModel*vec4(vNormal,0.0)).xyz );
 
-    float surface_dot_light = dot(surface_world_normal.xyz,light_dir);
-//    if (surface_dot_light > 0)
-//		vColor = vVertColor*0.1;
-//	else
-//		vColor = vVertColor*max(abs(surface_dot_light),0.1);
-	vColor = diffuse ;
+    vLightDir = light_dir;
+    vVNormal = surface_world_normal;
+	vColor = diffuse;//*surface_dot_light;
 }

@@ -56,13 +56,13 @@ int main()
     e2->add(sc2);
     e2->add(bec2);
     sc2->pos(0,0,50);
-	sc2->scale(10);
+	sc2->scale(5);
     auto cc2 = CubeComponent::Create();
 	cc2->set_color(0,1,0);
     e2->add(cc2);
-   /* auto mbh = MoveWithBounceBehavior::Create();
+    auto mbh = MoveWithBounceBehavior::Create();
     mbh->speed(1, 1, 0);
-    bec2->add(mbh);*/
+    bec2->add(mbh);
 
     engine.entity_manager().dump();
 

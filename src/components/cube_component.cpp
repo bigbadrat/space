@@ -14,6 +14,7 @@ namespace Tanaka
 
 	static GLuint g_vertex_array_id = 0;
 	static GLuint g_vertex_buffer_id = 0;
+	static const size_t SIZE_OF_VERTEX = 6;
 	
 	//TODO: Check all tris are clockwise!!!
 static GLfloat g_vertex_buffer_data[] = {
@@ -90,12 +91,10 @@ CubeComponent::CubeComponent():
 		glBufferData(GL_ARRAY_BUFFER,sizeof(g_vertex_buffer_data), g_vertex_buffer_data,GL_STATIC_DRAW);
 		
 		//For now, we know the attribute 0 is the vertex position.
-		glVertexAttribPointer( 0,3, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*6, 0);
-		glVertexAttribPointer( 1,3, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*6, (GLvoid*)(sizeof(GLfloat)*3));
-		//glVertexAttribPointer( 2,3, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*9, (GLvoid*)(sizeof(GLfloat)*6));
+		glVertexAttribPointer( 0,3, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*SIZE_OF_VERTEX, 0);
+		glVertexAttribPointer( 1,3, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*SIZE_OF_VERTEX, (GLvoid*)(sizeof(GLfloat)*3));
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
-		//glEnableVertexAttribArray(2);
 
 		//Unbind the vertex array to prevent accidetal changes from outside
 		glBindVertexArray(0);
@@ -121,19 +120,13 @@ void CubeComponent::draw()
 	Renderer& renderer = Engine::get().renderer();
 	renderer.set_shader("easy");
 	
-	static float rot = 0.0f;
-	_spatial->rotation(15,rot,0.0f);
-	rot += 2;
-	if (rot > 360)
-		rot = 0;
-	
 	//Move the cube where it should appear
 	renderer.set_model_matrix( _spatial->matrix() );
 	renderer.set_diffuse(_color);
 	
 	//Activate the vertex array with all the data and ask for drawing
 	glBindVertexArray(g_vertex_array_id);
-	glDrawArrays(GL_TRIANGLES, 0, sizeof(g_vertex_buffer_data)/(sizeof(GLfloat)*6));
+	glDrawArrays(GL_TRIANGLES, 0, sizeof(g_vertex_buffer_data)/(sizeof(GLfloat)*SIZE_OF_VERTEX));
 
 }
 

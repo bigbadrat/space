@@ -47,6 +47,7 @@ class Renderer
 		unsigned int _diffuse;
 		unsigned int _mvp;
 		unsigned int _model;
+		unsigned int _it_model;
 		unsigned int _light_dir;
 };
 
