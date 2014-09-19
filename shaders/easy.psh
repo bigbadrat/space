@@ -1,10 +1,12 @@
 #version 330 core
 
 in vec3 vColor;
-out vec3 color;
+//out vec3 color;
  
 void main()
 {
-
-    color = vColor;
+//
+//	if (!gl_FrontFacing)
+//		return;
+    gl_FragColor = vec4(vColor,1.0);
 }

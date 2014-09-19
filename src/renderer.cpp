@@ -137,9 +137,11 @@ void Renderer::init()
 
 	// Enable depth test
 	//glEnable(GL_DEPTH_TEST);
-	//// Accept fragment if it closer to the camera than the former one
-	//glDepthFunc(GL_LESS);
+	// Accept fragment if it closer to the camera than the former one
+	//glDepthFunc(GL_LEQUAL);
+	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+	//glFrontFace(GL_CW);
 
 	//Load shaders and get the handle for the uniform parameter
 	load_shaders("easy.vsh", "easy.psh");
@@ -173,9 +175,9 @@ void Renderer::set_shader( const std::string& shader_name )
 void Renderer::begin_scene_drawing()
 {
 	//For now, simply clear the background
-    glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
+    glClearColor(0.4f, 0.4f, 0.4f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
-		set_light_dir(glm::normalize(glm::vec3(0.15f,-1.0f, 0.15f)));
+	set_light_dir(glm::normalize(glm::vec3(0.15f,-1.0f, 0.15f)));
 
 }
 
